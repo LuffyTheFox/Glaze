@@ -4,3 +4,6 @@ How to install:
 3) Open toolbar in 3D view (N - button)
 4) Glaze -> Protect Image . Select your image from your PC.
 5) Done. Your image is protected from your artstyle copying by AI
+
+Benefits:
+This addon doesn't visually change your image
