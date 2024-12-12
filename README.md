@@ -13,7 +13,7 @@ Features:
 
 How It Works:
 
-    Embed a Steganographic Watermark: The image is converted to the YCbCr color space, and the watermark is embedded in the Y (luminance) channel. The watermark is applied through bitwise operations, ensuring it's undetectable by the naked eye.
+    Embed a Steganographic Watermark: The image is converted to the YCbCr color space, and the watermark is embedded in the Y (luminance) channel. The watermark is applied through bitwise operations, ensuring it's undetectable by human eye.
 
     Adaptive Noise: A noise layer is added to the image, with intensity based on edge detection. The noise helps obscure fine details, making it harder for AI models to replicate the image's features accurately.
 
