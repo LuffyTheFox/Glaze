@@ -39,7 +39,7 @@ def embed_steganographic_watermark(img_array, watermark):
 
 # Адаптивный шум
 def apply_adaptive_noise(img_array, intensity=0.01):
-    edges = cv2.Canny(img_array, 100, 200)
+    edges = cv2.Canny(img_array,25,255,L2gradient=False)
     mask = np.where(edges > 0, 0, 1)
     noise = np.random.normal(0, intensity, img_array.shape)
     return np.clip(img_array + (noise * mask[:, :, np.newaxis]), 0, 255).astype(np.uint8)
