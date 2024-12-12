@@ -27,9 +27,15 @@ This addon is particularly useful for artists, photographers, and content creato
 Installation:
 
     Download the addon from the repository.
+    Launch Blender as adminstrator. I tested addon in version 4.2.3 LTS
     In Blender, go to Edit > Preferences > Add-ons > Install.
     Select the .zip file of the addon.
     Enable the addon from the list of installed addons.
+    Press "Install Libraries" button to install Python dependencies for addon.
+    After installation reboot Blender
+    After Blender reboot press "N" button to open Tool Menu and search for "Glaze" tab.
+    Glaze: Protect Image > Protect image from AI > Select image. Adjust Noise Intensity parameter if you want.
+    Done. The modified image is saved with a .protected.png extension, ensuring the protection process is non-destructive and easy to distinguish.
 
 License:
 
