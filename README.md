@@ -1,4 +1,4 @@
-Glaze: AI Image Protection Addon
+Glaze: Image Protection Addon from AI
 
 Glaze is a Blender addon designed to protect the unique style of artists' images from AI-based algorithms, such as those used in LoRA (Low-Rank Adaptation) and other style-transfer technologies. The addon provides a set of tools for embedding subtle modifications into images to make them resistant to style cloning and analysis, helping safeguard the integrity of artistic works in the age of AI.
 Features:
