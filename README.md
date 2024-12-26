@@ -1,42 +1,47 @@
-Glaze: Image Protection Addon from AI
+Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI. The addon performs two main operations:
 
-Glaze is a Blender addon designed to protect the unique style of artists' images from AI-based algorithms, such as those used in LoRA (Low-Rank Adaptation) and other style-transfer technologies. The addon provides a set of tools for embedding subtle modifications into images to make them resistant to style cloning and analysis, helping safeguard the integrity of artistic works in the age of AI.
-Features:
+    Apply Cryptographic Noise and Watermark: It modifies an image by embedding a steganographic watermark and adding cryptographic noise, making it harder for AI systems to replicate or copy the image accurately. The noise is generated based on the hash of the image, and the watermark is embedded in the YCbCr color space to avoid noticeable changes in the image.
 
-    Steganographic Watermarking: Embeds a hidden watermark in the luminance channel of the image, ensuring that it is not visible to the human eye but can be detected by the artist or through custom algorithms. This helps protect the image from unauthorized reproduction or analysis.
+    Blender Integration: The addon provides a Blender panel and operator that allows users to select an image and apply the protection process directly from the Blender interface. The image is saved with a modified file name (e.g., .protected.png) and can be adjusted with a noise intensity parameter.
 
-    Adaptive Noise Application: Adds noise to the image based on the detected edges, making it more difficult for AI models to extract clean, usable data for style cloning. The noise adapts to the image structure, blending seamlessly while adding protective elements.
+Key Features:
 
-    Multifrequency Noise with DCT: Applies noise in the frequency domain using Discrete Cosine Transform (DCT). This method targets the frequency components of the image, adding subtle variations that are harder to detect or undo by AI algorithms. It works in parallel, enhancing performance with multi-threading.
+    Cryptographic Noise: Adds unique noise to the image based on its hash, making it difficult for AI to recreate.
+    Steganographic Watermark: Embeds a hidden watermark to help track the image's originality.
+    User-Friendly Interface: Integrated into Blender with a custom panel and operator for easy image protection.
+    Supports Multiple Image Formats: Can process common image formats like PNG, JPEG, BMP, and others.
 
-    Multithreading Support: To handle large images more efficiently, the addon splits the image into blocks and processes them concurrently, speeding up the operation and making it suitable for high-resolution images.
+Libraries Used:
 
-How It Works:
+    cv2, PIL, numpy, scipy, and hashlib are used to manipulate and process the images.
 
-    Embed a Steganographic Watermark: The image is converted to the YCbCr color space, and the watermark is embedded in the Y (luminance) channel. The watermark is applied through bitwise operations, ensuring it's undetectable by human eye.
+Workflow:
 
-    Adaptive Noise: A noise layer is added to the image, with intensity based on edge detection. The noise helps obscure fine details, making it harder for AI models to replicate the image's features accurately.
+    The user selects an image through the Blender file picker.
+    The addon applies cryptographic noise and embeds a watermark.
+    The modified image is saved with a .protected.png extension.
 
-    Multifrequency Noise: The image is divided into blocks, and noise is applied in the frequency domain using DCT. This operation is parallelized for better performance, allowing for faster processing times.
+This addon aims to provide protection for 2D artists' works, helping prevent unauthorized AI copying.
 
-    Saving the Protected Image: The modified image is saved with a .protected.png extension, ensuring the protection process is non-destructive and easy to distinguish.
+    Download the Addon
+        Download the addon .zip file.
 
-Use Case:
+    Open Blender
+        Launch Blender.
 
-This addon is particularly useful for artists, photographers, and content creators who wish to protect their work from being cloned or analyzed by AI algorithms. It provides an additional layer of security, helping to maintain the uniqueness of artistic styles in an increasingly automated world.
-Installation:
+    Install the Addon
+        Go to Edit > Preferences.
+        Click on Add-ons tab, then click Install.
+        Select the downloaded .zip file and click Install Add-on.
 
-    Download the addon from this GitHub repository. Use Code > Download ZIP
-    Launch Blender as adminstrator. I tested addon in version 4.2.3 LTS
-    In Blender, go to Edit > Preferences > Add-ons > Install.
-    Select the .zip file of the addon.
-    Enable the addon from the list of installed addons.
-    Press "Install Libraries" button to install Python dependencies for addon.
-    After installation reboot Blender
-    After Blender reboot press "N" button to open Tool Menu and search for "Glaze" tab.
-    Glaze: Protect Image > Protect image from AI > Select image. Adjust Noise Intensity parameter if you want.
-    Done. The modified image is saved with a .protected.png extension, ensuring the protection process is non-destructive and easy to distinguish.
+    Enable the Addon
+        Find "Glaze: Protect Image" in the list and check the box to enable it.
 
-License:
+    Access the Addon
+        In the 3D View, go to the Glaze tab in the right panel.
 
-This addon is open-source and available under the MIT License. Feel free to contribute and modify the code as needed.
+    Use the Addon
+        Click Select Image to choose an image.
+        The addon will process and save the protected image as .protected.png.
+
+You’re done! The addon will now protect your images from AI copying.
