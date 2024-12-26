@@ -27,7 +27,7 @@ This addon is particularly useful for artists, photographers, and content creato
 Installation:
 
     Download the addon from the repository: 
-    Use following link: [https://github.com/LuffyTheFox/Glaze/archive/refs/heads/main.zip](https://github.com/LuffyTheFox/Glaze/archive/refs/heads/main.zip)
+    Use following link: https://github.com/LuffyTheFox/Glaze/archive/refs/heads/main.zip
     Launch Blender as adminstrator. I tested addon in version 4.2.3 LTS
     In Blender, go to Edit > Preferences > Add-ons > Install.
     Select the .zip file of the addon.
