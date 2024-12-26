@@ -26,7 +26,7 @@ Use Case:
 This addon is particularly useful for artists, photographers, and content creators who wish to protect their work from being cloned or analyzed by AI algorithms. It provides an additional layer of security, helping to maintain the uniqueness of artistic styles in an increasingly automated world.
 Installation:
 
-    Download the addon from the repository.
+    Download the addon from the repositor: https://github.com/LuffyTheFox/Glaze/archive/refs/heads/main.zip
     Launch Blender as adminstrator. I tested addon in version 4.2.3 LTS
     In Blender, go to Edit > Preferences > Add-ons > Install.
     Select the .zip file of the addon.
