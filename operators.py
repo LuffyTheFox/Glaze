@@ -5,41 +5,66 @@ import bpy
 
 try:
     import cv2
+    from concurrent.futures import ThreadPoolExecutor
     from PIL import Image
+    from scipy.fftpack import dct, idct
     import numpy as np
-    import secrets
+    from hashlib import sha256
 except ImportError:
     print("Some required libraries are not installed. Functionality will be limited.")
 
 import traceback
 
-# Усложнённое добавление адаптивного шума
-def apply_robust_noise(img_array, intensity=0.05):
-    # Используем криптографически стойкий генератор случайных чисел
-    rng = np.random.default_rng(secrets.randbelow(1 << 32))
-    noise = rng.normal(0, intensity, img_array.shape)
+# Generate cryptographic noise based on image hash
+def generate_cryptographic_noise(img_array, intensity=0.1):
+    height, width, _ = img_array.shape
+    img_hash = sha256(img_array.tobytes()).digest()
+    noise = np.frombuffer(img_hash * ((height * width * 3) // len(img_hash) + 1), dtype=np.uint8)
+    noise = noise[:height * width * 3].reshape((height, width, 3))
+    noise = (noise / 255.0 - 0.5) * 2 * intensity
+    return noise.astype(np.float32)
 
-    # Генерация случайной маски с нелинейным распределением
-    gradient_x = cv2.Sobel(img_array, cv2.CV_64F, 1, 0, ksize=3)
-    gradient_y = cv2.Sobel(img_array, cv2.CV_64F, 0, 1, ksize=3)
-    gradient_magnitude = np.sqrt(np.sum(gradient_x**2 + gradient_y**2, axis=-1))
-    mask = np.tanh(gradient_magnitude / (gradient_magnitude.max() + 1e-5))
-    mask = mask[:, :, np.newaxis]  # Добавляем размер канала
+# Apply cryptographic noise
+def apply_cryptographic_noise(img_array, intensity=0.1):
+    noise = generate_cryptographic_noise(img_array, intensity)
+    return np.clip(img_array + noise, 0, 255).astype(np.uint8)
 
-    # Применяем шум с дополнительным преобразованием
-    robust_noise = np.sin(noise + np.pi * mask)
-    return np.clip(img_array + robust_noise * 255, 0, 255).astype(np.uint8)
+# Embed steganographic watermark
+def embed_steganographic_watermark(img_array, watermark):
+    ycbcr = rgb_to_ycbcr(img_array)
+    y = np.uint8(ycbcr[:, :, 0])
+    watermark = np.uint8(watermark)
+    y = (y & ~1) | watermark
+    ycbcr[:, :, 0] = y
+    return ycbcr_to_rgb(ycbcr)
 
-# Изменённый процесс модификации изображения
+# Convert RGB to YCbCr
+def rgb_to_ycbcr(rgb):
+    y = 0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]
+    cb = -0.1687 * rgb[:, :, 0] - 0.3313 * rgb[:, :, 1] + 0.5 * rgb[:, :, 2] + 128
+    cr = 0.5 * rgb[:, :, 0] - 0.4187 * rgb[:, :, 1] - 0.0813 * rgb[:, :, 2] + 128
+    return np.dstack((y, cb, cr))
+
+# Convert YCbCr to RGB
+def ycbcr_to_rgb(ycbcr):
+    y, cb, cr = cv2.split(ycbcr)
+    r = y + 1.402 * (cr - 128)
+    g = y - 0.34414 * (cb - 128) - 0.71414 * (cr - 128)
+    b = y + 1.772 * (cb - 128)
+    return np.dstack((r, g, b)).clip(0, 255).astype(np.uint8)
+
+# Modify image for protection
 def modify_image(image_path, output_path, intensity=0.1):
     try:
         img = Image.open(image_path)
         img_array = np.array(img, dtype=np.uint8)
 
-        # Встроим шум и защиту
-        img_array = apply_robust_noise(img_array, intensity)
+        watermark = np.random.randint(0, 2, size=img_array.shape[:2], dtype=np.uint8)
+        img_array = embed_steganographic_watermark(img_array, watermark)
 
-        modified_img = Image.fromarray(img_array)
+        img_array_noisy = apply_cryptographic_noise(img_array, intensity)
+
+        modified_img = Image.fromarray(img_array_noisy)
         modified_img.save(output_path)
     except Exception as e:
         error_traceback = traceback.format_exc()
@@ -90,6 +115,3 @@ def register():
 def unregister():
     bpy.utils.unregister_class(GLAZE_OT_ProtectOperator)
     bpy.utils.unregister_class(GLAZE_PT_ProtectPanel)
-
-if __name__ == "__main__":
-    register()
