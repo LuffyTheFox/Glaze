@@ -23,6 +23,8 @@ Workflow:
 
 This addon aims to provide protection for 2D artists' works, helping prevent unauthorized AI copying.
 
+How to install addon?
+
     Download the Addon
         Download the addon .zip file.
 
@@ -36,6 +38,7 @@ This addon aims to provide protection for 2D artists' works, helping prevent una
 
     Enable the Addon
         Find "Glaze: Protect Image" in the list and check the box to enable it.
+        Use Install Libraries button to install python libraries for addon in your Blender.
 
     Access the Addon
         In the 3D View, go to the Glaze tab in the right panel.
