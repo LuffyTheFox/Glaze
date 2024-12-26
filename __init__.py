@@ -27,17 +27,16 @@ from . import operators
 import bpy
 bl_info = {
     "name": "Glaze",
-    "author": "ChatGPT, Grok, LuffyTheFox",
-    "description": "Protect images from neural network artstyle copying and LoRA by adding noise",
+    "author": "ChatGPT, LuffyTheFox",
+    "description": "Protect images from neural network",
     "blender": (4, 2, 3),
-    "version": (1, 4, 0),
+    "version": (1, 5, 0),
     "location": "View3D > Sidebar > Glaze",
     "warning": "",
     "wiki_url": "https://t.me/BlenderNext",
     "tracker_url": "https://t.me/BlenderNext",
     "category": "3D View"
 }
-
 
 passed = False
 
@@ -79,27 +78,27 @@ class GLAZE_OT_InstallLibraries(bpy.types.Operator):
 
 
 def register():
-    install_libraries.set_dependencies_installed(False)
     try:
         install_libraries.checkDeps()
-    except ModuleNotFoundError:
-        # Если библиотеки не установлены, регистрируем только предпочтения
+        install_libraries.set_dependencies_installed(True)
         bpy.utils.register_class(GLAZE_AddonPreferences)
         bpy.utils.register_class(GLAZE_OT_InstallLibraries)
-    else:
-        # Если библиотеки установлены, регистрируем все компоненты
-        bpy.utils.register_class(GLAZE_AddonPreferences)
         operators.register()
+    except ModuleNotFoundError:
+        install_libraries.set_dependencies_installed(False)
+        bpy.utils.register_class(GLAZE_AddonPreferences)
+        bpy.utils.register_class(GLAZE_OT_InstallLibraries)
 
 
 def unregister():
-    bpy.utils.unregister_class(GLAZE_AddonPreferences)
-    bpy.utils.unregister_class(GLAZE_OT_InstallLibraries)
     try:
         operators.unregister()
-    except:
-        # Если operators не был зарегистрирован, просто игнорируем
-        pass
+    except Exception:
+        pass  # Игнорируем, если operators не был зарегистрирован
+    if hasattr(GLAZE_OT_InstallLibraries, 'bl_rna'):
+        bpy.utils.unregister_class(GLAZE_OT_InstallLibraries)
+    if hasattr(GLAZE_AddonPreferences, 'bl_rna'):
+        bpy.utils.unregister_class(GLAZE_AddonPreferences)
 
 
 if __name__ == "__main__":
