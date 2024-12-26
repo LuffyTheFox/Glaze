@@ -30,7 +30,7 @@ bl_info = {
     "author": "ChatGPT, LuffyTheFox",
     "description": "Protect images from neural network",
     "blender": (4, 2, 3),
-    "version": (1, 5, 0),
+    "version": (1, 6, 0),
     "location": "View3D > Sidebar > Glaze",
     "warning": "",
     "wiki_url": "https://t.me/BlenderNext",
