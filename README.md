@@ -7,7 +7,6 @@ Glaze. Cryptographic image protection addon which helps protecting images from b
 Key Features:
 
     Cryptographic Noise: Adds unique noise to the image based on its hash, making it difficult for AI to recreate.
-    Steganographic Watermark: Embeds a hidden watermark to help track the image's originality.
     User-Friendly Interface: Integrated into Blender with a custom panel and operator for easy image protection.
     Supports Multiple Image Formats: Can process common image formats like PNG, JPEG, BMP, and others.
 
@@ -18,7 +17,7 @@ Libraries Used:
 Workflow:
 
     The user selects an image through the Blender file picker.
-    The addon applies cryptographic noise and embeds a watermark.
+    The addon converts image to cryptographic noise and restores it.
     The modified image is saved with a .protected.png extension.
 
 This addon aims to provide protection for 2D artists' works, helping prevent unauthorized AI copying.
