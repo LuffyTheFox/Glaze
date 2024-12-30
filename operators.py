@@ -16,7 +16,7 @@ except ImportError:
 import traceback
 
 # Generate cryptographic noise based on image hash
-def generate_cryptographic_noise(img_array, intensity=0.1):
+def generate_cryptographic_noise(img_array, intensity=1.0):
     height, width, _ = img_array.shape
     img_hash = sha256(img_array.tobytes()).digest()
     noise = np.frombuffer(img_hash * ((height * width * 3) // len(img_hash) + 1), dtype=np.uint8)
@@ -25,18 +25,9 @@ def generate_cryptographic_noise(img_array, intensity=0.1):
     return noise.astype(np.float32)
 
 # Apply cryptographic noise
-def apply_cryptographic_noise(img_array, intensity=0.1):
+def apply_cryptographic_noise(img_array, intensity=1.0):
     noise = generate_cryptographic_noise(img_array, intensity)
     return np.clip(img_array + noise, 0, 255).astype(np.uint8)
-
-# Embed steganographic watermark
-def embed_steganographic_watermark(img_array, watermark):
-    ycbcr = rgb_to_ycbcr(img_array)
-    y = np.uint8(ycbcr[:, :, 0])
-    watermark = np.uint8(watermark)
-    y = (y & ~1) | watermark
-    ycbcr[:, :, 0] = y
-    return ycbcr_to_rgb(ycbcr)
 
 # Convert RGB to YCbCr
 def rgb_to_ycbcr(rgb):
@@ -54,13 +45,10 @@ def ycbcr_to_rgb(ycbcr):
     return np.dstack((r, g, b)).clip(0, 255).astype(np.uint8)
 
 # Modify image for protection
-def modify_image(image_path, output_path, intensity=0.1):
+def modify_image(image_path, output_path, intensity=1.0):
     try:
         img = Image.open(image_path)
         img_array = np.array(img, dtype=np.uint8)
-
-        watermark = np.random.randint(0, 2, size=img_array.shape[:2], dtype=np.uint8)
-        img_array = embed_steganographic_watermark(img_array, watermark)
 
         img_array_noisy = apply_cryptographic_noise(img_array, intensity)
 
@@ -77,7 +65,7 @@ class GLAZE_OT_ProtectOperator(Operator, ImportHelper, ExportHelper):
     filename_ext = ".png"
     filter_glob: StringProperty(default="*.png;*.jpg;*.jpeg;*.bmp", options={'HIDDEN'})
 
-    intensity: FloatProperty(name="Noise Intensity", default=0.1, min=0.01, max=0.2)
+    intensity: FloatProperty(name="Noise Intensity", default=1.0, min=0.01, max=1.0)
 
     def execute(self, context):
         try:
