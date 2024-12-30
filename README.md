@@ -1,4 +1,5 @@
-Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI. The addon performs two main operations:
+Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI. 
+The addon performs two main operations:
 
     Apply Cryptographic Noise and Watermark: It modifies an image by embedding a steganographic watermark and adding cryptographic noise, making it harder for AI systems to replicate or copy the image accurately. The noise is generated based on the hash of the image, and the watermark is embedded in the YCbCr color space to avoid noticeable changes in the image.
 
