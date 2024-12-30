@@ -1,64 +1,108 @@
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 from bpy.types import Operator, Panel
-from bpy.props import StringProperty, FloatProperty, IntProperty
+from bpy.props import StringProperty, FloatProperty
 import bpy
 
 try:
-    import cv2
-    from concurrent.futures import ThreadPoolExecutor
     from PIL import Image
-    from scipy.fftpack import dct, idct
     import numpy as np
     from hashlib import sha256
+    import secrets
+    import traceback
 except ImportError:
     print("Some required libraries are not installed. Functionality will be limited.")
 
-import traceback
+# Применение минимального adversarial шума
+def apply_minimal_adversarial_noise(img_array, epsilon=1.0):
+    img_array_float = img_array.astype(np.float32)
 
-# Generate cryptographic noise based on image hash
+    # Вычисляем градиенты изображения
+    gradients = np.gradient(img_array_float)
+    
+    # Меньшая амплитуда для шума, чтобы он был едва заметен
+    gradient_magnitude = np.sqrt(np.square(gradients[0]) + np.square(gradients[1]))
+    gradient_sign = np.sign(gradient_magnitude)
+    
+    # Генерация минимального шума с малой амплитудой
+    adversarial_noise = epsilon * gradient_sign
+    return np.clip(img_array_float + adversarial_noise, 0, 255).astype(np.uint8)
+
+# Встраивание скрытых данных с минимальными изменениями
+def embed_hidden_data_in_subtle_areas(img_array, hidden_data, epsilon=1.0):
+    img_array_float = img_array.astype(np.float32)
+    
+    # Генерация и добавление малозаметного adversarial noise
+    img_array_float = apply_minimal_adversarial_noise(img_array_float, epsilon)
+
+    # Встраиваем скрытые данные с минимальными изменениями
+    hidden_data_bytes = hidden_data.encode('utf-8')
+    pattern_index = 0
+    height, width, channels = img_array_float.shape
+    for x in range(height):
+        for y in range(width):
+            if (x + y) % 50 == 0:  # Редкие изменения в изображении
+                for channel in range(channels):
+                    if pattern_index < len(hidden_data_bytes):
+                        img_array_float[x, y, channel] ^= hidden_data_bytes[pattern_index]  # Применяем XOR
+                        pattern_index += 1
+    return np.clip(img_array_float, 0, 255).astype(np.uint8)
+
+# Генерация и применение криптографического шума на основе хеша изображения
 def generate_cryptographic_noise(img_array, intensity=1.0):
-    height, width, _ = img_array.shape
-    img_hash = sha256(img_array.tobytes()).digest()
-    noise = np.frombuffer(img_hash * ((height * width * 3) // len(img_hash) + 1), dtype=np.uint8)
-    noise = noise[:height * width * 3].reshape((height, width, 3))
+    height, width, channels = img_array.shape
+    img_hash = sha256(img_array.tobytes()).digest()  # Хэш изображения для защиты
+    noise = np.frombuffer(img_hash * ((height * width * channels) // len(img_hash) + 1), dtype=np.uint8)
+    noise = noise[:height * width * channels].reshape((height, width, channels))
     noise = (noise / 255.0 - 0.5) * 2 * intensity
     return noise.astype(np.float32)
 
-# Apply cryptographic noise
 def apply_cryptographic_noise(img_array, intensity=1.0):
     noise = generate_cryptographic_noise(img_array, intensity)
     return np.clip(img_array + noise, 0, 255).astype(np.uint8)
 
-# Convert RGB to YCbCr
-def rgb_to_ycbcr(rgb):
-    y = 0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]
-    cb = -0.1687 * rgb[:, :, 0] - 0.3313 * rgb[:, :, 1] + 0.5 * rgb[:, :, 2] + 128
-    cr = 0.5 * rgb[:, :, 0] - 0.4187 * rgb[:, :, 1] - 0.0813 * rgb[:, :, 2] + 128
-    return np.dstack((y, cb, cr))
+# Встраивание уникального идентификатора в изображение
+def embed_unique_identifier(img_array_noisy):
+    height, width, channels = img_array_noisy.shape
+    # Генерация уникального идентификатора на основе хеша изображения
+    unique_id = sha256(img_array_noisy.tobytes()).hexdigest()[:16]  # Короткий хеш
+    unique_id_bytes = unique_id.encode('utf-8')
 
-# Convert YCbCr to RGB
-def ycbcr_to_rgb(ycbcr):
-    y, cb, cr = cv2.split(ycbcr)
-    r = y + 1.402 * (cr - 128)
-    g = y - 0.34414 * (cb - 128) - 0.71414 * (cr - 128)
-    b = y + 1.772 * (cb - 128)
-    return np.dstack((r, g, b)).clip(0, 255).astype(np.uint8)
+    # Встраиваем идентификатор в пиксели
+    pattern_index = 0
+    for x in range(height):
+        for y in range(width):
+            if (x + y) % 10 == 0:  # Каждые 10 пикселей модифицируем
+                for channel in range(channels):
+                    if pattern_index < len(unique_id_bytes):
+                        img_array_noisy[x, y, channel] ^= unique_id_bytes[pattern_index]  # Применяем XOR с байтом из уникального идентификатора
+                        pattern_index += 1
+    return img_array_noisy
 
-# Modify image for protection
-def modify_image(image_path, output_path, intensity=1.0):
+# Основная функция для защиты изображения
+def protect_image(image_path, output_path, intensity=1.0):
     try:
         img = Image.open(image_path)
         img_array = np.array(img, dtype=np.uint8)
 
-        img_array_noisy = apply_cryptographic_noise(img_array, intensity)
+        # Генерация скрытых данных с использованием secrets
+        hidden_data = secrets.token_urlsafe(32)  # Генерация случайных секретных данных
+        img_array_adv = embed_hidden_data_in_subtle_areas(img_array, hidden_data)
 
+        # Применение криптографического шума
+        img_array_noisy = apply_cryptographic_noise(img_array_adv, intensity)
+
+        # Встраивание уникального идентификатора и скрытых данных
+        img_array_noisy = embed_unique_identifier(img_array_noisy)
+
+        # Сохранение изображения в формате PNG или JPEG
         modified_img = Image.fromarray(img_array_noisy)
-        modified_img.save(output_path)
-    except Exception as e:
-        error_traceback = traceback.format_exc()
-        raise RuntimeError(f"Error in image processing: {str(e)}\nTraceback:\n{error_traceback}")
+        modified_img.save(output_path, format="PNG" if output_path.endswith(".png") else "JPEG", quality=95)
+        print(f"Image successfully protected and saved to {output_path}")
 
-# Blender operator for image protection
+    except Exception as e:
+        print(f"Error processing the image: {e}")
+
+# Blender оператор для защиты изображения
 class GLAZE_OT_ProtectOperator(Operator, ImportHelper, ExportHelper):
     bl_idname = "glaze.protect_operator"
     bl_label = "Protect Image"
@@ -71,7 +115,7 @@ class GLAZE_OT_ProtectOperator(Operator, ImportHelper, ExportHelper):
         try:
             input_path = self.filepath
             output_path = bpy.path.ensure_ext(self.filepath, ".protected.png")
-            modify_image(input_path, output_path, self.intensity)
+            protect_image(input_path, output_path, self.intensity)  # Модификация изображения с защитой
             self.report({'INFO'}, f"Image protected and saved as: {output_path}")
             return {'FINISHED'}
         except RuntimeError as e:
@@ -82,7 +126,7 @@ class GLAZE_OT_ProtectOperator(Operator, ImportHelper, ExportHelper):
             self.report({'ERROR'}, f"An unexpected error occurred:\n{error_traceback}")
             return {'CANCELLED'}
 
-# Blender panel for the UI
+# Blender панель для UI
 class GLAZE_PT_ProtectPanel(Panel):
     bl_label = "Glaze: Protect Image"
     bl_idname = "GLAZE_PT_protect_panel"
@@ -95,7 +139,7 @@ class GLAZE_PT_ProtectPanel(Panel):
         layout.label(text="Protect image from AI")
         layout.operator("glaze.protect_operator", text="Select image")
 
-# Register classes
+# Регистрация классов
 def register():
     bpy.utils.register_class(GLAZE_OT_ProtectOperator)
     bpy.utils.register_class(GLAZE_PT_ProtectPanel)
