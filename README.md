@@ -5,8 +5,6 @@ This addon performs the main protection operation: it converts an image into cry
 
 This addon aims to provide protection for 2D artists' works, helping to prevent unauthorized AI copying.
 
-How to install the addon?
-
 Russian:
 Glaze. Это дополнение для криптографической защиты изображений, которое помогает защитить изображения от копирования с помощью ИИ. Это дополнение нарушает работу системы CLIP Vision и классификации изображений CLIP.
 
@@ -14,7 +12,7 @@ Glaze. Это дополнение для криптографической з�
 
 Это дополнение направлено на защиту работ 2D-художников, помогая предотвратить несанкционированное копирование ИИ.
 
-Как установить дополнение?
+How to install the addon?
 
     Download the Addon
         Download the addon .zip file.
@@ -37,5 +35,3 @@ Glaze. Это дополнение для криптографической з�
     Use the Addon
         Click Select Image to choose an image.
         The addon will process and save the protected image as .protected.png.
-
-You’re done! The addon will now protect your images from AI copying.
