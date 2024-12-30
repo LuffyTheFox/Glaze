@@ -1,27 +1,9 @@
-Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI. 
-The addon performs two main operations:
+Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI.
+This addon breaks CLIP Vision and CLIP image classification system.
 
-    Apply Cryptographic Noise and Watermark: It modifies an image by embedding a cryptographic noise, making it harder for AI systems to replicate or copy the image accurately. The noise is generated based on the hash of the image, and the watermark is embedded in the YCbCr color space to avoid noticeable changes in the image.
+This addon performs main protection operation, it converts an image to a cryptographic noise based on SHA256 image hash, and restores it making for AI very hard to replicate it, because noise is not random anymore and completely unique and depends from input image.
 
-    Blender Integration: The addon provides a Blender panel and operator that allows users to select an image and apply the protection process directly from the Blender interface. The image is saved with a modified file name (e.g., .protected.png) and can be adjusted with a noise intensity parameter.
-
-Key Features:
-
-    Cryptographic Noise: Adds unique noise to the image based on its hash, making it difficult for AI to recreate.
-    User-Friendly Interface: Integrated into Blender with a custom panel and operator for easy image protection.
-    Supports Multiple Image Formats: Can process common image formats like PNG, JPEG, BMP, and others.
-
-Libraries Used:
-
-    cv2, PIL, numpy, scipy, and hashlib are used to manipulate and process the images.
-
-Workflow:
-
-    The user selects an image through the Blender file picker.
-    The addon converts image to cryptographic noise and restores it.
-    The modified image is saved with a .protected.png extension.
-
-This addon aims to provide protection for 2D artists' works, helping prevent unauthorized AI copying.
+This addon aims to provide protection for 2D artists works, helping prevent unauthorized AI copying.
 
 How to install addon?
 
