@@ -15,7 +15,8 @@ Glaze. Это дополнение для криптографической з�
 How to install the addon?
 
     Download the Addon
-        Download the addon .zip file.
+        Download the addon .zip file
+        Use following link: https://github.com/LuffyTheFox/Glaze/archive/refs/heads/main.zip
 
     Open Blender
         Launch Blender.
