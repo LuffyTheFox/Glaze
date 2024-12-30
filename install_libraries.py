@@ -11,6 +11,7 @@ def checkDeps():
     import scipy
     import PIL
     import cv2
+    import secrets
     set_dependencies_installed(True)
 
 
@@ -85,6 +86,7 @@ def install_and_import_requirements():
         install_module('scipy')
         install_module('pillow')
         install_module('opencv-python')
+        install_module('secrets')
         checkDeps()  # Check if all modules are now installed
     except Exception as e:
         print(f"Installation of dependencies failed: {e}")
