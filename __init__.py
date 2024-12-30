@@ -29,7 +29,7 @@ bl_info = {
     "name": "Glaze",
     "author": "ChatGPT, LuffyTheFox",
     "description": "Protect images from neural network",
-    "blender": (4, 2, 3),
+    "blender": (4, 0, 0),
     "version": (2, 0, 0),
     "location": "View3D > Sidebar > Glaze",
     "warning": "",
