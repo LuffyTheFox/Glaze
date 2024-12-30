@@ -32,7 +32,7 @@ How to install the addon?
         Disable and Enable addon in blender preferences.
 
     Access the Addon
-        In the 3D View, go to the Glaze tab (N button) in the right panel.
+        In the 3D View open your Tool bar (N button), and select Glaze tab in the right panel.
 
     Use the Addon
         Click Select Image to choose an image.
