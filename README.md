@@ -29,7 +29,7 @@ How to install the addon?
     Enable the Addon
         Find "Glaze: Protect Image" in the list and check the box to enable it.
         Use Install Libraries button to install python libraries for addon in your Blender.
-        Disable and Enable addon in blender preferences.
+        Disable and Enable addon in blender preferences, and restart Blender this is very important.
 
     Access the Addon
         In the 3D View open your Tool bar (N button), and select Glaze tab in the right panel.
