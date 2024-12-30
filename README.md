@@ -1,3 +1,4 @@
+English:
 Glaze. This is a cryptographic image protection addon that helps protect images from being copied by AI. This addon disrupts the CLIP Vision and CLIP image classification system.
 
 This addon performs the main protection operation: it converts an image into cryptographic noise based on the SHA256 image hash and restores it, making it very difficult for AI to replicate, as the noise is no longer random but completely unique and depends on the input image.
@@ -5,6 +6,15 @@ This addon performs the main protection operation: it converts an image into cry
 This addon aims to provide protection for 2D artists' works, helping to prevent unauthorized AI copying.
 
 How to install the addon?
+
+Russian:
+Glaze. Это дополнение для криптографической защиты изображений, которое помогает защитить изображения от копирования с помощью ИИ. Это дополнение нарушает работу системы CLIP Vision и классификации изображений CLIP.
+
+Это дополнение выполняет основную операцию защиты: оно преобразует изображение в криптографический шум на основе хеша изображения SHA256 и восстанавливает его, что делает для ИИ очень сложным его воспроизведение, поскольку шум больше не является случайным, а полностью уникален и зависит от входного изображения.
+
+Это дополнение направлено на защиту работ 2D-художников, помогая предотвратить несанкционированное копирование ИИ.
+
+Как установить дополнение?
 
     Download the Addon
         Download the addon .zip file.
