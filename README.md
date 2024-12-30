@@ -1,11 +1,10 @@
-Glaze. Cryptographic image protection addon which helps protecting images from being copied by AI.
-This addon breaks CLIP Vision and CLIP image classification system.
+Glaze. This is a cryptographic image protection addon that helps protect images from being copied by AI. This addon disrupts the CLIP Vision and CLIP image classification system.
 
-This addon performs main protection operation, it converts an image to a cryptographic noise based on SHA256 image hash, and restores it making for AI very hard to replicate it, because noise is not random anymore and completely unique and depends from input image.
+This addon performs the main protection operation: it converts an image into cryptographic noise based on the SHA256 image hash and restores it, making it very difficult for AI to replicate, as the noise is no longer random but completely unique and depends on the input image.
 
-This addon aims to provide protection for 2D artists works, helping prevent unauthorized AI copying.
+This addon aims to provide protection for 2D artists' works, helping to prevent unauthorized AI copying.
 
-How to install addon?
+How to install the addon?
 
     Download the Addon
         Download the addon .zip file.
