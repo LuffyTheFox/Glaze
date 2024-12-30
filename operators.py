@@ -13,7 +13,7 @@ except ImportError:
     print("Some required libraries are not installed. Functionality will be limited.")
 
 # Применение минимального adversarial шума
-def apply_minimal_adversarial_noise(img_array, epsilon=1.0):
+def apply_minimal_adversarial_noise(img_array, epsilon=0.1):
     img_array_float = img_array.astype(np.float32)
 
     # Вычисляем градиенты изображения
@@ -28,7 +28,7 @@ def apply_minimal_adversarial_noise(img_array, epsilon=1.0):
     return np.clip(img_array_float + adversarial_noise, 0, 255).astype(np.uint8)
 
 # Встраивание скрытых данных с минимальными изменениями
-def embed_hidden_data_in_subtle_areas(img_array, hidden_data, epsilon=1.0):
+def embed_hidden_data_in_subtle_areas(img_array, hidden_data, epsilon=0.1):
     img_array_float = img_array.astype(np.float32)
     
     # Генерация и добавление малозаметного adversarial noise
